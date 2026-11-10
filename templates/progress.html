@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Progress</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #4facfe;
+            color: white;
+        }
+
+        .strong {
+            color: green;
+        }
+
+        .weak {
+            color: red;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4facfe;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        .center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SUMMARY -->
+<div class="card">
+    <h2>Performance Summary</h2>
+
+    <p><b>Total Questions:</b> {{ total }}</p>
+    <p><b>Correct Answers:</b> {{ score }}</p>
+    <p><b>Skipped:</b> {{ skipped }}</p>
+    <p><b>Accuracy:</b> {{ accuracy }}%</p>
+    <p><b>Time Spent:</b> {{ time_spent }} sec</p>
+</div>
+
+<!-- PIE CHART -->
+<div class="card">
+    <h3>Performance Chart</h3>
+    <canvas id="chart" width="300" height="300"></canvas>
+</div>
+
+<!-- SKILLS -->
+<div class="card">
+    <h3>Skill Analysis</h3>
+
+    {% for skill, data in skills.items() %}
+        {% set s = data.get('score', 0) %}
+        
+        {% if s >= 0.7 %}
+            <p class="strong">{{ skill }} → Strong ({{ (s*100)|round(0) }}%)</p>
+        {% else %}
+            <p class="weak">{{ skill }} → Weak ({{ (s*100)|round(0) }}%)</p>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<!-- HISTORY -->
+<div class="card">
+    <h3>Question History</h3>
+
+    <table>
+        <tr>
+            <th>Question</th>
+            <th>Your Answer</th>
+            <th>Correct Answer</th>
+            <th>Result</th>
+        </tr>
+
+        {% for h in history %}
+        <tr>
+            <td>{{ h.question }}</td>
+            <td>{{ h.selected }}</td>
+            <td>{{ h.correct }}</td>
+            <td>
+                {% if h.result == "Correct" %}
+                    <span style="color:green;">Correct</span>
+                {% else %}
+                    <span style="color:red;">Wrong</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<!-- BUTTONS -->
+<div class="center">
+    <a href="/download"><button>Download Report</button></a>
+    <a href="/dashboard"><button>Back</button></a>
+</div>
+
+<!-- CHART SCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+window.onload = function () {
+
+    const correct = Number("{{ score }}") || 0;
+    const total = Number("{{ total }}") || 0;
+    const skipped = Number("{{ skipped }}") || 0;
+
+    const wrong = total - correct - skipped;
+
+    const data = {
+        labels: ['Correct', 'Wrong', 'Skipped'],
+        datasets: [{
+            data: [correct, wrong, skipped],
+            backgroundColor: ['#4CAF50', '#f44336', '#FFC107']
+        }]
+    };
+
+    new Chart(document.getElementById('chart'), {
+        type: 'pie',
+        data: data
+    });
+};
+</script>
+
+</body>
+</html>

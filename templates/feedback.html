@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Feedback</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f4f6f9;
+            padding-top: 50px;
+        }
+
+        .card {
+            background: white;
+            width: 400px;
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background: #4facfe;
+            border: none;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Quiz Completed</h2>
+
+    <p><b>Total Questions:</b> {{ total }}</p>
+    <p><b>Correct Answers:</b> {{ score }}</p>
+    <p><b>Skipped:</b> {{ skipped }}</p>
+    <p><b>Accuracy:</b> {{ accuracy }}%</p>
+
+    <a href="/progress"><button>View Progress</button></a>
+    <a href="/download"><button>Download Report</button></a>
+    <br>
+    <a href="/dashboard"><button>Back to Dashboard</button></a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+        }
+
+        .container {
+            width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .logout {
+            margin-top: 15px;
+            display: inline-block;
+            color: red;
+            text-decoration: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Welcome, {{ name }}</h2>
+    <p>Select your quiz preferences</p>
+
+    <form method="POST" action="/start_quiz">
+
+        <!-- Subject -->
+        <select name="subject" required>
+            <option value="">Select Subject</option>
+            <option value="maths">Maths</option>
+            <option value="english">English</option>
+        </select>
+
+        <!-- Level -->
+        <select name="level" required>
+            <option value="">Select Level</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+        </select>
+
+        <button type="submit">Start Quiz</button>
+
+    </form>
+
+    <a href="/logout" class="logout">Logout</a>
+
+</div>
+
+</body>
+</html>

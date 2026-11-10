@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+        }
+
+        .container {
+            width: 500px;
+            margin: 60px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px gray;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .timer {
+            color: red;
+        }
+
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            background: #4facfe;
+            color: white;
+            cursor: pointer;
+        }
+
+        .skip {
+            background: orange;
+        }
+
+        .hint {
+            background: green;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="top">
+        <span>Level: {{ level }}</span>
+        <span>Score: {{ session.get('score', 0) }}</span>
+        <span class="timer">Time: <span id="timer">{{ timer }}</span>s</span>
+    </div>
+
+    <form method="POST" id="quizForm">
+
+        <h3>{{ q.q }}</h3>
+
+        {% for option in q.options %}
+            <input type="radio" name="answer" value="{{ option }}">
+            {{ option }} <br>
+        {% endfor %}
+
+        <button type="submit">Submit</button>
+
+        <!-- Skip Button -->
+        <button type="submit" name="skip" class="skip">Skip</button>
+
+    </form>
+
+    <!-- Hint Button -->
+    <button class="hint" onclick="showHint()">Show Hint</button>
+
+    <p id="hintText" style="display:none; color:green;">
+        {{ q.hint }}
+    </p>
+
+</div>
+
+<script>
+    // SAFE TIMER (no JS error)
+    let time = parseInt("{{ timer | default(15) }}");
+
+    if (isNaN(time)) {
+        time = 15;
+    }
+
+    let countdown = setInterval(function () {
+
+        let timerElement = document.getElementById("timer");
+
+        if (timerElement) {
+            timerElement.innerText = time;
+        }
+
+        time--;
+
+        if (time < 0) {
+            clearInterval(countdown);
+            document.getElementById("quizForm").submit();
+        }
+
+    }, 1000);
+
+    function showHint() {
+        let hint = document.getElementById("hintText");
+        if (hint) {
+            hint.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>
+  
